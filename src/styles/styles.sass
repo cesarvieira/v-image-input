@@ -1,0 +1,61 @@
+@use 'vuetify/tools';
+@use 'vuetify/settings';
+@use './variables' as *;
+
+@include tools.layer('components')
+  .v-image-input
+
+    &.v-sheet
+      display: flex
+
+    &--disabled
+      pointer-events: none
+      opacity: var(--v-disabled-opacity)
+
+    &--clickable
+      cursor: pointer
+
+    input[type="file"]
+      left: 0
+      opacity: 0
+      position: absolute
+      cursor: pointer
+      top: 0
+      z-index: -1
+
+    .v-image-input--density
+      &-default
+        height: 152px;
+      &-comfortable
+        height: 144px;
+      &-compact
+        height: 136px;
+
+  .v-image-input-title
+    font-size: $file-upload-title-font-size
+    opacity: var(--v-medium-emphasis-opacity)
+    font-weight: 600
+    text-align: center
+
+  .v-image-input-subtitle
+    opacity: var(--v-medium-emphasis-opacity)
+
+  .v-image-input-icon
+    opacity: var(--v-medium-emphasis-opacity)
+    font-size: $file-upload-icon-font-size
+    margin-bottom: $file-upload-icon-margin-bottom
+
+    .v-image-input--density-comfortable &
+      font-size: $file-upload-icon-font-size - .5rem
+      margin-bottom: $file-upload-icon-margin-bottom - .5rem
+
+    .v-image-input--density-compact &
+      font-size: $file-upload-icon-font-size - 1rem
+      margin-bottom: $file-upload-icon-margin-bottom - 1rem
+
+  .v-image-input-items
+    margin: $file-upload-items-margin
+
+  .v-image-input-item
+    &:not(:first-child)
+      margin-top: 8px
