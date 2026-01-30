@@ -11,6 +11,7 @@ Vue 3 component for image selection with integrated cropping, built with Vuetify
 - **Initial image** via URL (`img-url`)
 - **Filter by type** (`filter-by-type`, e.g. PNG only)
 - **Customizable height** (`height`)
+- **Crop options**: **stencil** (rect / circle), **aspect-ratio**, **img-width** / **img-height** (output size)
 - **Variant** and **density** (outlined, filled, plain / default, comfortable, compact)
 - **Label**, **hint**, **readonly**, **disabled**, **clearable**
 - **i18n** (pt, en) for placeholder texts
@@ -137,6 +138,51 @@ Controls the component’s vertical density.
 </template>
 ```
 
+### Stencil (circle) and aspect ratio
+
+Circular crop with fixed 1:1 ratio (e.g. for avatars).
+
+```vue
+<template>
+  <VImageInput
+    v-model="file"
+    label="Avatar (circle)"
+    stencil="circle"
+    :aspect-ratio="1"
+  />
+</template>
+```
+
+### Aspect ratio only
+
+Rectangular crop with fixed ratio (e.g. 16:9). Output size follows the crop.
+
+```vue
+<template>
+  <VImageInput
+    v-model="file"
+    label="16:9 crop"
+    :aspect-ratio="16 / 9"
+  />
+</template>
+```
+
+### Output size (img-width, img-height, aspect-ratio)
+
+Cropped image is resized to the given dimensions with the given aspect ratio.
+
+```vue
+<template>
+  <VImageInput
+    v-model="file"
+    label="400×300 (4:3)"
+    :img-width="400"
+    :img-height="300"
+    :aspect-ratio="4 / 3"
+  />
+</template>
+```
+
 ### Label and hint
 
 ```vue
@@ -188,6 +234,10 @@ const file = ref<File | null>(null);
 | `imgUrl` | `string` | `null` | URL of the image shown initially (preview). |
 | `filterByType` | `string` | `'image/*'` | Type accepted by the input (e.g. `'image/png'`). |
 | `height` | `string \| number` | — | Preview area height (e.g. `'160'`, `160`). |
+| `stencil` | `'rect' \| 'circle'` | `'rect'` | Crop stencil shape (rectangular or circular). |
+| `aspectRatio` | `number` | — | Crop aspect ratio (e.g. `1`, `16/9`, `4/3`). |
+| `imgWidth` | `number` | — | Output image width in pixels (after crop). |
+| `imgHeight` | `number` | — | Output image height in pixels (after crop). |
 | `variant` | `'outlined' \| 'filled' \| 'plain'` | — | Field visual variant (VField). |
 | `density` | `'default' \| 'comfortable' \| 'compact'` | — | Component density. |
 | `label` | `string` | — | Field label. |

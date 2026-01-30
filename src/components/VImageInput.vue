@@ -41,6 +41,25 @@ const _props = defineProps({
     type: String,
     default: null,
   },
+  stencil: {
+    type: String as PropType<'rect' | 'circle'>,
+    default: 'rect',
+    validator: (val: string) => {
+      return val === 'rect' || val === 'circle';
+    },
+  },
+  imgWidth: {
+    type: Number,
+    default: undefined,
+  },
+  imgHeight: {
+    type: Number,
+    default: undefined,
+  },
+  aspectRatio: {
+    type: Number,
+    default: undefined,
+  },
   modelValue: {
     type: Object as PropType<File | null>,
     default: null,
@@ -235,6 +254,10 @@ onBeforeUnmount(() => {
       <VImageCropDialog
         v-model="showCropper"
         :file="image"
+        :stencil="props.stencil"
+        :img-width="props.imgWidth"
+        :img-height="props.imgHeight"
+        :aspect-ratio="props.aspectRatio"
         @update:file="onFileCropped"
       />
     </template>

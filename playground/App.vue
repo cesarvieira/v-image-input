@@ -96,6 +96,24 @@ const densityCompactUrl = computed(() =>
   densityCompact.value ? URL.createObjectURL(densityCompact.value) : null,
 );
 
+// Stencil (circle) + aspect ratio 1 – e.g. avatar
+const stencilCircleResult = ref<File | null>(null);
+const stencilCircleUrl = computed(() =>
+  stencilCircleResult.value ? URL.createObjectURL(stencilCircleResult.value) : null,
+);
+
+// Aspect ratio only (e.g. 16/9)
+const aspectRatioResult = ref<File | null>(null);
+const aspectRatioUrl = computed(() =>
+  aspectRatioResult.value ? URL.createObjectURL(aspectRatioResult.value) : null,
+);
+
+// imgWidth + imgHeight + aspectRatio – fixed output size
+const sizedCropResult = ref<File | null>(null);
+const sizedCropUrl = computed(() =>
+  sizedCropResult.value ? URL.createObjectURL(sizedCropResult.value) : null,
+);
+
 const formatSize = (bytes: number) => {
   if (bytes === 0) return '0 Bytes';
   const k = 1024;
@@ -435,6 +453,95 @@ const formatSize = (bytes: number) => {
                 />
               </VCol>
             </VRow>
+          </VCardText>
+        </VCard>
+      </VCol>
+    </VRow>
+
+    <!-- 12. Stencil (circle) + aspect ratio -->
+    <VRow>
+      <VCol cols="12" md="6">
+        <VCard>
+          <VCardTitle>12. Stencil circle (stencil + aspect-ratio)</VCardTitle>
+          <VCardText>
+            <p class="text-caption mb-4">
+              Circular crop with fixed 1:1 ratio. Useful for avatars.
+            </p>
+            <VImageInput
+              v-model="stencilCircleResult"
+              label="Avatar (circle)"
+              stencil="circle"
+              :aspect-ratio="1"
+              height="140"
+            />
+          </VCardText>
+          <VCardText v-if="stencilCircleResult">
+            <VImg
+              v-if="stencilCircleUrl"
+              :src="stencilCircleUrl"
+              max-height="160"
+              class="rounded-circle"
+              style="aspect-ratio: 1; object-fit: cover"
+            />
+          </VCardText>
+        </VCard>
+      </VCol>
+
+      <!-- 13. Aspect ratio only -->
+      <VCol cols="12" md="6">
+        <VCard>
+          <VCardTitle>13. Aspect ratio (aspect-ratio)</VCardTitle>
+          <VCardText>
+            <p class="text-caption mb-4">
+              Rectangular crop with fixed 16:9 ratio. Output size follows crop.
+            </p>
+            <VImageInput
+              v-model="aspectRatioResult"
+              label="16:9 crop"
+              :aspect-ratio="16 / 9"
+              height="140"
+            />
+          </VCardText>
+          <VCardText v-if="aspectRatioResult">
+            <VImg
+              v-if="aspectRatioUrl"
+              :src="aspectRatioUrl"
+              max-height="200"
+              class="rounded"
+            />
+          </VCardText>
+        </VCard>
+      </VCol>
+    </VRow>
+
+    <!-- 14. imgWidth + imgHeight + aspectRatio -->
+    <VRow>
+      <VCol cols="12">
+        <VCard>
+          <VCardTitle>14. Output size (img-width, img-height, aspect-ratio)</VCardTitle>
+          <VCardText>
+            <p class="text-caption mb-4">
+              Cropped image is resized to 400×300 with 4:3 aspect ratio.
+            </p>
+            <VImageInput
+              v-model="sizedCropResult"
+              label="400×300 (4:3)"
+              :img-width="400"
+              :img-height="300"
+              :aspect-ratio="4 / 3"
+              height="140"
+            />
+          </VCardText>
+          <VCardText v-if="sizedCropResult">
+            <p class="text-caption mb-2">
+              Output: {{ sizedCropResult.name }} ({{ formatSize(sizedCropResult.size) }})
+            </p>
+            <VImg
+              v-if="sizedCropUrl"
+              :src="sizedCropUrl"
+              max-height="200"
+              class="rounded"
+            />
           </VCardText>
         </VCard>
       </VCol>
