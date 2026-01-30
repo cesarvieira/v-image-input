@@ -205,6 +205,7 @@ onBeforeUnmount(() => {
           centerAffix: false,
           error: isValid.value === false,
           dirty: isDirty.value || !!fileUrl,
+          loading: props.loading,
         }"
         :class="[
           'v-image-input__field',
