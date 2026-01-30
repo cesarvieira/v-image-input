@@ -50,7 +50,7 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cesarvieira/v-image-input.git"
+    "url": "git+https://github.com/cesarvieira/v-image-input.git"
   },
   "bugs": {
     "url": "https://github.com/cesarvieira/v-image-input/issues"
@@ -78,7 +78,7 @@
     "vuetify": "^3.11.5"
   },
   "dependencies": {
-    "@cesarv/v-image-crop-dialog": "^1.1.0",
+    "@cesarv/v-image-crop-dialog": "^1.1.1",
     "vue-advanced-cropper": "^2.8.9"
   }
 }
