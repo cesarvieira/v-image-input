@@ -75,10 +75,10 @@
   },
   "peerDependencies": {
     "vue": "^3.5.26",
-    "vuetify": "^3.11.5"
+    "vuetify": "^4.0.0"
   },
   "dependencies": {
-    "@cesarv/v-image-crop-dialog": "^1.1.1",
+    "@cesarv/v-image-crop-dialog": "^2.0.0",
     "vue-advanced-cropper": "^2.8.9"
   }
 }

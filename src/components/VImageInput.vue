@@ -1,17 +1,18 @@
 <script setup lang="ts">
-import { onBeforeUnmount, ref, shallowRef, useAttrs, useModel, watch, type PropType } from 'vue';
+import { computed, onBeforeUnmount, ref, shallowRef, useAttrs, useModel, watch, type PropType } from 'vue';
 import { useDefaults, useLocale } from 'vuetify';
 import { VField, VInput, VSheet } from 'vuetify/components';
-import { makeDensityProps, useDensity } from 'vuetify/lib/composables/density.mjs';
-import { makeFileFilterProps, useFileFilter } from 'vuetify/lib/composables/fileFilter.mjs';
-import { filterInputAttrs } from 'vuetify/lib/util/helpers.mjs';
-import { makeVSheetProps } from 'vuetify/lib/components/VSheet/VSheet.mjs';
-import { useFileDrop } from 'vuetify/lib/composables/fileDrop.mjs';
 import pt from '../locales/pt';
 import en from '../locales/en';
-import { makeVFieldProps } from 'vuetify/lib/components/VField/VField.mjs';
-import { makeVInputProps } from 'vuetify/lib/components/VInput/VInput.mjs';
 import VImageCropDialog from '@cesarv/v-image-crop-dialog';
+
+type InputRule =
+  string |
+  boolean |
+  PromiseLike<boolean | string> |
+  ((value: unknown) => boolean | string) |
+  ((value: unknown) => PromiseLike<boolean | string>) |
+  [string, unknown, string];
 
 const locale = useLocale();
 locale.messages['value'] = {
@@ -27,15 +28,82 @@ locale.messages['value'] = {
 };
 
 const _props = defineProps({
-  ...makeFileFilterProps({
-    filterByType: 'image/*',
-  }),
-  ...makeVInputProps(),
-  ...makeVFieldProps({
-    clearable: true,
-  }),
-  ...makeDensityProps(),
-  ...makeVSheetProps(),
+  clearable: {
+    type: Boolean,
+    default: true,
+  },
+  clearIcon: {
+    type: String,
+    default: undefined,
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+  readonly: {
+    type: Boolean,
+    default: false,
+  },
+  loading: {
+    type: [Boolean, String],
+    default: false,
+  },
+  label: {
+    type: String,
+    default: undefined,
+  },
+  hint: {
+    type: String,
+    default: undefined,
+  },
+  persistentHint: {
+    type: Boolean,
+    default: false,
+  },
+  variant: {
+    type: String as PropType<'outlined' | 'plain' | 'filled' | 'underlined' | 'solo' | 'solo-inverted' | 'solo-filled'>,
+    default: undefined,
+  },
+  density: {
+    type: String as PropType<'default' | 'comfortable' | 'compact'>,
+    default: 'default',
+  },
+  hideDetails: {
+    type: [Boolean, String] as PropType<boolean | 'auto'>,
+    default: false,
+  },
+  messages: {
+    type: [String, Array] as PropType<string | string[]>,
+    default: () => [],
+  },
+  errorMessages: {
+    type: [String, Array] as PropType<string | string[]>,
+    default: () => [],
+  },
+  maxErrors: {
+    type: [String, Number],
+    default: 1,
+  },
+  rules: {
+    type: Array as PropType<InputRule[]>,
+    default: () => [],
+  },
+  name: {
+    type: String,
+    default: undefined,
+  },
+  height: {
+    type: [String, Number],
+    default: undefined,
+  },
+  class: {
+    type: [String, Array, Object] as PropType<unknown>,
+    default: undefined,
+  },
+  filterByType: {
+    type: String,
+    default: 'image/*',
+  },
 
   imgUrl: {
     type: String,
@@ -71,18 +139,64 @@ const _props = defineProps({
 const props = useDefaults(_props, 'VImageInput');
 const attrs = useAttrs();
 
-const { densityClasses } = useDensity(props, 'v-image-input');
-const { filterAccepted } = useFileFilter(props);
+const densityClasses = computed(() => [`v-image-input--density-${props.density}`]);
+
+const filterAccepted = (files: File[]) => {
+  const accept = (props.filterByType || '').trim();
+  if (!accept) return { accepted: files };
+
+  const accepted = files.filter((file) => {
+    const type = file.type || '';
+    return accept.split(',').some((rule) => {
+      const token = rule.trim();
+      if (!token) return false;
+      if (token === '*/*') return true;
+      if (token.endsWith('/*')) {
+        const base = token.slice(0, -1);
+        return type.startsWith(base);
+      }
+      return token === type;
+    });
+  });
+
+  return { accepted };
+};
+
 const model = useModel(props, 'modelValue');
 
 const isDragging = shallowRef(false);
 const vSheetRef = ref<InstanceType<typeof VSheet> | null>(null);
 const inputRef = ref<HTMLInputElement>();
-const { handleDrop } = useFileDrop();
-
-const inputProps = VInput.filterProps(props);
-const fieldProps = VField.filterProps(props);
-const [rootAttrs, inputAttrs] = filterInputAttrs(attrs);
+const inputProps = computed(() => ({
+  disabled: props.disabled,
+  readonly: props.readonly,
+  hideDetails: props.hideDetails,
+  messages: props.messages,
+  errorMessages: props.errorMessages,
+  maxErrors: props.maxErrors,
+  rules: props.rules,
+  density: props.density,
+}));
+const fieldProps = computed(() => ({
+  clearable: props.clearable,
+  clearIcon: props.clearIcon,
+  disabled: props.disabled,
+  readonly: props.readonly,
+  label: props.label,
+  hint: props.hint,
+  persistentHint: props.persistentHint,
+  variant: props.variant,
+  density: props.density,
+}));
+const rootAttrs = computed(() => attrs);
+const inputAttrs = computed(() => {
+  const relevant = ['accept', 'capture', 'multiple'];
+  const output: Record<string, unknown> = {};
+  for (const key of relevant) {
+    if (key in attrs) output[key] = attrs[key];
+  }
+  return output;
+});
 
 const acceptFallback = attrs['accept'] ? String(attrs['accept']) : 'image/*';
 const inputAccept = props.filterByType ?? acceptFallback;
@@ -102,14 +216,14 @@ const onDragleave = (e: DragEvent) => {
   isDragging.value = false;
 };
 
-const onDrop = async (e: DragEvent) => {
+const onDrop = (e: DragEvent) => {
   e.preventDefault();
   e.stopImmediatePropagation();
   isDragging.value = false;
 
   if (!inputRef.value) return;
 
-  const allDroppedFiles = await handleDrop(e);
+  const allDroppedFiles = Array.from(e.dataTransfer?.files ?? []);
   selectAccepted(allDroppedFiles);
 };
 

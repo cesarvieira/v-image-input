@@ -127,8 +127,8 @@ const formatSize = (bytes: number) => {
   <VContainer>
     <VRow>
       <VCol cols="12">
-        <h1 class="text-h3 mb-4">VImageInput - Playground</h1>
-        <p class="text-body-1 mb-6">
+        <h1 class="text-display-small mb-4">VImageInput - Playground</h1>
+        <p class="text-body-large mb-6">
           Explore different configurations and use cases of the VImageInput component.
         </p>
       </VCol>
@@ -140,12 +140,12 @@ const formatSize = (bytes: number) => {
         <VCard>
           <VCardTitle>1. Basic</VCardTitle>
           <VCardText>
-            <p class="text-caption mb-4">Simple usage with v-model.</p>
+            <p class="text-body-small mb-4">Simple usage with v-model.</p>
             <VImageInput v-model="basicResult" label="Select an image" />
           </VCardText>
           <VCardText v-if="basicResult">
             <VDivider class="mb-4" />
-            <h4 class="text-subtitle-1 mb-2">Result:</h4>
+            <h4 class="text-body-large mb-2">Result:</h4>
             <VTable density="compact">
               <tbody>
                 <tr>
@@ -172,7 +172,7 @@ const formatSize = (bytes: number) => {
         <VCard>
           <VCardTitle>2. Initial image (img-url)</VCardTitle>
           <VCardText>
-            <p class="text-caption mb-4">Shows a URL as preview before selection.</p>
+            <p class="text-body-small mb-4">Shows a URL as preview before selection.</p>
             <VImageInput
               v-model="withInitialResult"
               label="Replace image"
@@ -181,7 +181,7 @@ const formatSize = (bytes: number) => {
           </VCardText>
           <VCardText v-if="withInitialResult">
             <VDivider class="mb-4" />
-            <p class="text-caption">New image selected:</p>
+            <p class="text-body-small">New image selected:</p>
             <VImg v-if="withInitialUrl" :src="withInitialUrl" max-height="200" class="mt-2 rounded" />
           </VCardText>
         </VCard>
@@ -194,7 +194,7 @@ const formatSize = (bytes: number) => {
         <VCard>
           <VCardTitle>3. PNG only (filter-by-type)</VCardTitle>
           <VCardText>
-            <p class="text-caption mb-4">Restricts selection to image/png type.</p>
+            <p class="text-body-small mb-4">Restricts selection to image/png type.</p>
             <VImageInput
               v-model="pngResult"
               label="Select a PNG"
@@ -203,7 +203,7 @@ const formatSize = (bytes: number) => {
           </VCardText>
           <VCardText v-if="pngResult">
             <VDivider class="mb-4" />
-            <p class="text-caption">File: {{ pngResult.name }} ({{ formatSize(pngResult.size) }})</p>
+            <p class="text-body-small">File: {{ pngResult.name }} ({{ formatSize(pngResult.size) }})</p>
             <VImg v-if="pngUrl" :src="pngUrl" max-height="200" class="mt-2 rounded" />
           </VCardText>
         </VCard>
@@ -214,7 +214,7 @@ const formatSize = (bytes: number) => {
         <VCard>
           <VCardTitle>4. Validation (max 2MB)</VCardTitle>
           <VCardText>
-            <p class="text-caption mb-4">Example of external validation by size.</p>
+            <p class="text-body-small mb-4">Example of external validation by size.</p>
             <VImageInput v-model="validatedResult" label="Image up to 2MB" />
             <VAlert
               v-if="validatedResult && isValid !== null"
@@ -239,7 +239,7 @@ const formatSize = (bytes: number) => {
       <VCol cols="12">
         <VCard>
           <VCardTitle>5. Different heights (height)</VCardTitle>
-          <p class="text-caption px-4">Small, medium and large via height prop.</p>
+          <p class="text-body-small px-4">Small, medium and large via height prop.</p>
           <VCardText>
             <VRow>
               <VCol cols="12" sm="4">
@@ -281,7 +281,7 @@ const formatSize = (bytes: number) => {
         <VCard>
           <VCardTitle>6. Read only (readonly)</VCardTitle>
           <VCardText>
-            <p class="text-caption mb-4">Does not allow changing or clearing the image.</p>
+            <p class="text-body-small mb-4">Does not allow changing or clearing the image.</p>
             <VImageInput v-model="readonlyResult" label="Readonly" readonly />
             <VImg v-if="readonlyUrl" :src="readonlyUrl" max-height="180" class="mt-4 rounded" />
           </VCardText>
@@ -291,7 +291,7 @@ const formatSize = (bytes: number) => {
         <VCard>
           <VCardTitle>7. Disabled (disabled)</VCardTitle>
           <VCardText>
-            <p class="text-caption mb-4">Field disabled.</p>
+            <p class="text-body-small mb-4">Field disabled.</p>
             <VImageInput v-model="disabledResult" label="Disabled" disabled />
             <VImg v-if="disabledUrl" :src="disabledUrl" max-height="180" class="mt-4 rounded" />
           </VCardText>
@@ -305,7 +305,7 @@ const formatSize = (bytes: number) => {
         <VCard>
           <VCardTitle>8. Label and hint</VCardTitle>
           <VCardText>
-            <p class="text-caption mb-4">With label and help message.</p>
+            <p class="text-body-small mb-4">With label and help message.</p>
             <VImageInput
               v-model="labeledResult"
               label="Profile photo"
@@ -325,7 +325,7 @@ const formatSize = (bytes: number) => {
         <VCard>
           <VCardTitle>9. Multiple inputs</VCardTitle>
           <VCardText>
-            <p class="text-caption mb-4">Multiple VImageInput on the same screen.</p>
+            <p class="text-body-small mb-4">Multiple VImageInput on the same screen.</p>
             <VRow>
               <VCol v-for="(_, i) in multiResults" :key="i" cols="4">
                 <VImageInput v-model="multiResults[i]" :label="`Image ${i + 1}`" height="100" />
@@ -347,7 +347,7 @@ const formatSize = (bytes: number) => {
       <VCol cols="12">
         <VCard>
           <VCardTitle>10. Variant (variant)</VCardTitle>
-          <p class="text-caption px-4">
+          <p class="text-body-small px-4">
             Field style: outlined (border), filled (filled), plain (minimal).
           </p>
           <VCardText>
@@ -405,7 +405,7 @@ const formatSize = (bytes: number) => {
       <VCol cols="12">
         <VCard>
           <VCardTitle>11. Density (density)</VCardTitle>
-          <p class="text-caption px-4">
+          <p class="text-body-small px-4">
             Vertical density: default, comfortable (less padding), compact (more compact).
           </p>
           <VCardText>
@@ -464,7 +464,7 @@ const formatSize = (bytes: number) => {
         <VCard>
           <VCardTitle>12. Stencil circle (stencil + aspect-ratio)</VCardTitle>
           <VCardText>
-            <p class="text-caption mb-4">
+            <p class="text-body-small mb-4">
               Circular crop with fixed 1:1 ratio. Useful for avatars.
             </p>
             <VImageInput
@@ -492,7 +492,7 @@ const formatSize = (bytes: number) => {
         <VCard>
           <VCardTitle>13. Aspect ratio (aspect-ratio)</VCardTitle>
           <VCardText>
-            <p class="text-caption mb-4">
+            <p class="text-body-small mb-4">
               Rectangular crop with fixed 16:9 ratio. Output size follows crop.
             </p>
             <VImageInput
@@ -520,7 +520,7 @@ const formatSize = (bytes: number) => {
         <VCard>
           <VCardTitle>14. Output size (img-width, img-height, aspect-ratio)</VCardTitle>
           <VCardText>
-            <p class="text-caption mb-4">
+            <p class="text-body-small mb-4">
               Cropped image is resized to 400×300 with 4:3 aspect ratio.
             </p>
             <VImageInput
@@ -533,7 +533,7 @@ const formatSize = (bytes: number) => {
             />
           </VCardText>
           <VCardText v-if="sizedCropResult">
-            <p class="text-caption mb-2">
+            <p class="text-body-small mb-2">
               Output: {{ sizedCropResult.name }} ({{ formatSize(sizedCropResult.size) }})
             </p>
             <VImg
